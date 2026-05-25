@@ -1070,7 +1070,6 @@
     <div class="hero-badge-dot">
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="2.5" fill="white"/></svg>
     </div>
-    v2.4 출시 — 제로 다운타임 배포 지원
   </div>
 
   <h1 class="hero-title">
@@ -1134,12 +1133,12 @@
       <!-- Floating cards -->
       <div class="float-card float-card-1">
         <div class="float-label">업타임</div>
-        <div class="float-value green">99.99%</div>
+        <div class="float-value green">-</div>
         <div class="float-sub">지난 30일</div>
       </div>
       <div class="float-card float-card-2">
-        <div class="float-label">평균 배포 시간</div>
-        <div class="float-value blue">1.8s</div>
+        <div class="float-label">평균 응답 시간</div>
+        <div class="float-value blue">0.3s</div>
         <div class="float-sub">전 달 대비 40% 빠름</div>
       </div>
     </div>
@@ -1150,20 +1149,20 @@
 <div class="stats-section">
   <div class="stats-grid">
     <div class="stat-item reveal">
-      <div class="stat-number">12<span class="stat-unit">만+</span></div>
+      <div class="stat-number">12<span class="stat-unit">+</span></div>
       <div class="stat-desc">개발자가 선택한 배포 플랫폼</div>
     </div>
     <div class="stat-item reveal reveal-delay-1">
-      <div class="stat-number">2<span class="stat-unit">초</span></div>
-      <div class="stat-desc">평균 배포 소요 시간</div>
+      <div class="stat-number">0.9<span class="stat-unit">초</span></div>
+      <div class="stat-desc">평균 Ai 응답 소요 시간</div>
     </div>
     <div class="stat-item reveal reveal-delay-2">
       <div class="stat-number">99<span class="stat-unit">.99%</span></div>
-      <div class="stat-desc">글로벌 SLA 업타임 보장</div>
+      <div class="stat-desc">Ai 검열 처리</div>
     </div>
     <div class="stat-item reveal reveal-delay-3">
-      <div class="stat-number">30<span class="stat-unit">개</span></div>
-      <div class="stat-desc">전 세계 엣지 리전</div>
+      <div class="stat-number">4<span class="stat-unit">개</span></div>
+      <div class="stat-desc">Ai 모델</div>
     </div>
   </div>
 </div>
@@ -1173,9 +1172,9 @@
   <div class="ai-demo-bg"></div>
   <div class="container" style="position:relative;z-index:1;">
     <div class="reveal">
-      <div class="section-label" style="background:none;border:none;padding:0;box-shadow:none;">✦ AI 체험</div>
+      <div class="section-label" style="background:none;border:none;padding:0;box-shadow:none;">✦ AI 데모</div>
       <h2 class="section-title" style="color:white;">AI 모델을<br>체험해보세요</h2>
-      <p class="section-desc" style="color:rgba(255,255,255,0.5);">Deployr에 내장된 AI 모델들의 실제 응답 예시를 확인하세요.</p>
+      <p class="section-desc" style="color:rgba(255,255,255,0.5);">Deployr에서 개발한 AI 모델들의 실제 응답 예시를 확인하세요.</p>
     </div>
 
     <!-- Model dropdown -->
@@ -1186,10 +1185,10 @@
           <svg class="ai-dropdown-arrow" id="dropdownArrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <div class="ai-dropdown-menu" id="dropdownMenu">
-          <div class="ai-dropdown-item active" onclick="selectModel(event,0)">GPT-4o</div>
-          <div class="ai-dropdown-item" onclick="selectModel(event,1)">Claude 3.5</div>
-          <div class="ai-dropdown-item" onclick="selectModel(event,2)">Gemini 1.5</div>
-          <div class="ai-dropdown-item" onclick="selectModel(event,3)">Llama 3.1</div>
+          <div class="ai-dropdown-item active" onclick="selectModel(event,0)">Can Ai 2.21 Pro Preview</div>
+          <div class="ai-dropdown-item" onclick="selectModel(event,1)">Can Ai 2.3 Flash</div>
+          <div class="ai-dropdown-item" onclick="selectModel(event,2)">Can Ai 2.2 Pro</div>
+          <div class="ai-dropdown-item" onclick="selectModel(event,3)">Ann 1.0</div>
         </div>
       </div>
     </div>
@@ -1204,22 +1203,22 @@
             <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="10" stroke="white" stroke-width="1.8"/><path d="M10 14l3 3 5-6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <div>
-            <div class="ai-model-name" id="modelName">GPT-4o</div>
-            <div class="ai-model-maker" id="modelMaker">OpenAI</div>
+            <div class="ai-model-name" id="modelName">Can Ai 2.21 Pro Preview</div>
+            <div class="ai-model-maker" id="modelMaker">Deployr</div>
           </div>
           <div class="ai-model-badge" id="modelBadge" style="display:none;"></div>
         </div>
         <div class="ai-model-desc" id="modelDesc">
-          OpenAI의 플래그십 멀티모달 모델. 텍스트, 이미지, 코드를 동시에 이해하며 복잡한 추론과 창의적 작업에서 탁월한 성능을 발휘합니다.
+          Deployr의 플래그십 멀티모달 모델. 텍스트, 이미지, 코드를 동시에 이해하며 복잡한 추론과 창의적 작업에서 탁월한 성능을 발휘합니다.
         </div>
         <div class="ai-model-specs">
           <div class="ai-spec-item">
-            <div class="ai-spec-label">컨텍스트</div>
-            <div class="ai-spec-value" id="specContext">128K 토큰</div>
+            <div class="ai-spec-label">1회 최대 사용 토큰</div>
+            <div class="ai-spec-value" id="specContext">2000 토큰</div>
           </div>
           <div class="ai-spec-item">
             <div class="ai-spec-label">응답 속도</div>
-            <div class="ai-spec-value" id="specSpeed">빠름</div>
+            <div class="ai-spec-value" id="specSpeed">0.9s</div>
           </div>
           <div class="ai-spec-item">
             <div class="ai-spec-label">특화 분야</div>
@@ -1227,7 +1226,7 @@
           </div>
           <div class="ai-spec-item">
             <div class="ai-spec-label">언어 지원</div>
-            <div class="ai-spec-value">100+</div>
+            <div class="ai-spec-value">5+</div>
           </div>
         </div>
       </div>
@@ -1240,7 +1239,7 @@
             <span style="background:#febc2e;width:10px;height:10px;border-radius:50%;display:inline-block;"></span>
             <span style="background:#28c840;width:10px;height:10px;border-radius:50%;display:inline-block;"></span>
           </div>
-          <div class="ai-qa-title" id="qaTitle">GPT-4o 대화</div>
+          <div class="ai-qa-title" id="qaTitle">대화예시</div>
         </div>
         <div class="ai-qa-body" id="qaBody">
           <!-- Q&A items injected by JS -->
@@ -1301,7 +1300,7 @@
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
   </div>
-  <p class="cta-note">이미 50,000+ 개발자가 Deployr를 사용하고 있습니다</p>
+  <p class="cta-note">이미 10+ 개발자가 Deployr를 사용하고 있습니다</p>
 </section>
 
 <!-- AI MODEL DATA WRITE POPUP -->
@@ -1382,14 +1381,14 @@
   // ─── AI MODEL DATA ───────────────────────────────────────────
   const models = [
     {
-      name: 'GPT-4o', maker: 'OpenAI',
+      name: 'Can Ai 2.21 Pro Preview', maker: 'Deployr',
       badge: '최신 모델', badgeColor: 'rgba(16,185,129,0.15)', badgeText: '#10b981', badgeBorder: 'rgba(16,185,129,0.3)',
       iconGradient: 'linear-gradient(135deg,#10b981,#059669)',
       tabDot: '#10b981',
-      desc: 'OpenAI의 플래그십 멀티모달 모델. 텍스트, 이미지, 코드를 동시에 이해하며 복잡한 추론과 창의적 작업에서 탁월한 성능을 발휘합니다.',
-      context: '128K 토큰', speed: '빠름', specialty: '멀티모달',
+      desc: 'Deployr의 플래그십 멀티모달 모델. 텍스트, 이미지, 코드를 동시에 이해하며 복잡한 추론과 창의적 작업에서 탁월한 성능을 발휘합니다.',
+      context: '2000 토큰', speed: '0.9s', specialty: '멀티모달',
       aiAvatarBg: 'linear-gradient(135deg,#10b981,#059669)',
-      qaTitle: 'GPT-4o 예시 대화',
+      qaTitle: '대화예시',
       qas: [
         { q: 'Python으로 배포 자동화 스크립트를 만들어줘', a: `import subprocess, json\n\ndef deploy(branch="main"):\n    # 빌드 → 테스트 → 배포\n    subprocess.run(["git","pull","origin",branch])\n    result = subprocess.run(["pytest","--tb=short"],\n                           capture_output=True)\n    if result.returncode == 0:\n        subprocess.run(["deployr","push",branch])\n        return {"status":"success","branch":branch}\n    return {"status":"failed","errors":result.stderr}` },
         { q: '배포 실패 원인을 분석해줘', a: '로그를 분석한 결과 3가지 원인이 확인됩니다:\n① 메모리 한도 초과 (512MB → 768MB 권장)\n② 헬스체크 타임아웃 (30s → 60s 조정)\n③ DB 연결 풀 부족 (max_connections=10 → 25)' }
