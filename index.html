@@ -1413,7 +1413,7 @@
       badge: '초장문 처리', badgeColor: 'rgba(139,92,246,0.15)', badgeText: '#8b5cf6', badgeBorder: 'rgba(139,92,246,0.3)',
       iconGradient: 'linear-gradient(135deg,#8b5cf6,#6d28d9)',
       tabDot: '#8b5cf6',
-      desc: 'Google DeepMind의 분석 모델. 최대 15500 토큰의 답변을 지원하며 코드베이스 전체 분석이 가능합니다.',
+      desc: 'Deployr의 분석 모델. 최대 15500 토큰의 답변을 지원하며 코드베이스 전체 분석이 가능합니다.',
       context: '15500 토큰', speed: '174s', specialty: '분석',
       aiAvatarBg: 'linear-gradient(135deg,#8b5cf6,#6d28d9)',
       qaTitle: '대화예시',
@@ -1481,7 +1481,7 @@
   }
   function selectModel(e, idx) {
     e.stopPropagation();
-    const labels = ['GPT-4o','Claude 3.5','Gemini 1.5','Llama 3.1'];
+    const labels = ['Can Ai 2.21 Pro Preview','Can Ai 2.3 Flash','Can Ai 2.2 Pro','Ann 1.0'];
     document.getElementById('dropdownLabel').textContent = labels[idx];
     document.querySelectorAll('.ai-dropdown-item').forEach((el, i) => el.classList.toggle('active', i === idx));
     document.getElementById('aiDropdown').classList.remove('open');
