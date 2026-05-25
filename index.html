@@ -1181,7 +1181,7 @@
     <div class="ai-dropdown-wrap reveal">
       <div class="ai-dropdown" id="aiDropdown" onclick="toggleDropdown()">
         <div class="ai-dropdown-selected">
-          <span id="dropdownLabel">GPT-4o</span>
+          <span id="dropdownLabel">Can Ai 2.21 Pro Preview</span>
           <svg class="ai-dropdown-arrow" id="dropdownArrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <div class="ai-dropdown-menu" id="dropdownMenu">
@@ -1255,7 +1255,7 @@
   <div class="data-section-bg"></div>
   <div class="container" style="position:relative;z-index:1;">
     <div class="reveal" style="text-align:center;">
-      <div class="section-label" style="justify-content:center;">📊 데이터 수집</div>
+      <div class="section-label" style="justify-content:center;">데이터 수집</div>
       <h2 class="section-title" style="text-align:center;margin:0 auto 16px;">인사이트 데이터를<br>수집하세요</h2>
       <p class="section-desc" style="text-align:center;margin:0 auto 48px;">팀의 배포 패턴, AI 모델 사용률, 성능 지표를 한눈에.<br>데이터를 기반으로 더 나은 의사결정을 내리세요.</p>
     </div>
@@ -1395,42 +1395,42 @@
       ]
     },
     {
-      name: 'Claude 3.5', maker: 'Anthropic',
+      name: 'Can Ai 2.3 Flash', maker: 'Deployr',
       badge: '추론 특화', badgeColor: 'rgba(245,158,11,0.15)', badgeText: '#f59e0b', badgeBorder: 'rgba(245,158,11,0.3)',
       iconGradient: 'linear-gradient(135deg,#f59e0b,#d97706)',
       tabDot: '#f59e0b',
-      desc: 'Anthropic의 최신 모델. 복잡한 코드 작성, 수학적 추론, 장문 분석에서 업계 최고 수준의 정확도를 보여줍니다. 한국어도 탁월합니다.',
-      context: '200K 토큰', speed: '매우 빠름', specialty: '코드/추론',
+      desc: 'Deployr의 사고 모델. 복잡한 코드 작성, 수학적 추론, 장문 분석에서 업계 최고 수준의 정확도를 보여줍니다.',
+      context: '2750 토큰', speed: '30.9s', specialty: '코드/추론',
       aiAvatarBg: 'linear-gradient(135deg,#f59e0b,#d97706)',
-      qaTitle: 'Claude 3.5 예시 대화',
+      qaTitle: '대화예시',
       qas: [
         { q: 'Kubernetes 배포 YAML을 작성해줘', a: `apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: deployr-app\nspec:\n  replicas: 3\n  selector:\n    matchLabels: {app: deployr}\n  template:\n    spec:\n      containers:\n      - name: app\n        image: deployr/app:latest\n        resources:\n          limits: {cpu: "500m", memory: "512Mi"}` },
         { q: '비용 최적화 방법을 추천해줘', a: '현재 인프라 분석 결과:\n• 미사용 인스턴스 3개 감지 → 월 ₩180,000 절약 가능\n• 스팟 인스턴스 전환 시 70% 추가 절약\n• 오토스케일링 임계값 60% → 80%로 조정 권장\n예상 절약액: 월 ₩520,000' }
       ]
     },
     {
-      name: 'Gemini 1.5', maker: 'Google DeepMind',
+      name: 'Can Ai 2.2 Pro', maker: 'Deplor',
       badge: '초장문 처리', badgeColor: 'rgba(139,92,246,0.15)', badgeText: '#8b5cf6', badgeBorder: 'rgba(139,92,246,0.3)',
       iconGradient: 'linear-gradient(135deg,#8b5cf6,#6d28d9)',
       tabDot: '#8b5cf6',
-      desc: 'Google DeepMind의 최강 멀티모달 모델. 최대 1M 토큰의 초장문 컨텍스트를 지원하며 코드베이스 전체 분석이 가능합니다.',
-      context: '1M 토큰', speed: '보통', specialty: '초장문 분석',
+      desc: 'Google DeepMind의 분석 모델. 최대 15500 토큰의 답변을 지원하며 코드베이스 전체 분석이 가능합니다.',
+      context: '15500 토큰', speed: '174s', specialty: '분석',
       aiAvatarBg: 'linear-gradient(135deg,#8b5cf6,#6d28d9)',
-      qaTitle: 'Gemini 1.5 예시 대화',
+      qaTitle: '대화예시',
       qas: [
         { q: '전체 코드베이스에서 보안 취약점을 찾아줘', a: `보안 스캔 완료 (총 1,247개 파일 분석)\n\n[HIGH] SQL Injection 가능성\n  → src/api/users.js:142\n  → 파라미터 직접 삽입 감지\n\n[MEDIUM] JWT 만료시간 미설정\n  → src/auth/middleware.js:38\n\n[LOW] 환경변수 하드코딩 3건\n  → 수정 권장` },
         { q: '아키텍처 개선점을 제안해줘', a: '현재: 모놀리식 Node.js 서버\n권장: 마이크로서비스 전환\n\n① Auth 서비스 분리\n② CDN 레이어 추가 (응답속도 40%↑)\n③ Redis 캐시 도입 (DB 부하 60%↓)\n④ Event-driven 아키텍처 적용' }
       ]
     },
     {
-      name: 'Llama 3.1', maker: 'Meta AI',
+      name: 'Ann 1.0', maker: 'Deployr & NiEc',
       badge: '오픈소스', badgeColor: 'rgba(239,68,68,0.15)', badgeText: '#ef4444', badgeBorder: 'rgba(239,68,68,0.3)',
       iconGradient: 'linear-gradient(135deg,#ef4444,#dc2626)',
       tabDot: '#ef4444',
-      desc: 'Meta의 오픈소스 대형 언어 모델. 완전한 데이터 주권과 프라이빗 배포가 가능하며 상업적 이용이 자유롭습니다.',
-      context: '128K 토큰', speed: '커스텀', specialty: '프라이빗 배포',
+      desc: 'Deployr & NiEc 오픈소스 대형 모델. 상업적 이용이 자유롭습니다.',
+      context: '커스텀', speed: '커스텀', specialty: '배포',
       aiAvatarBg: 'linear-gradient(135deg,#ef4444,#dc2626)',
-      qaTitle: 'Llama 3.1 예시 대화',
+      qaTitle: '대화예시',
       qas: [
         { q: '온프레미스 배포 방법을 알려줘', a: `# Docker로 Llama 3.1 로컬 배포\ndocker run -d \\\n  --gpus all \\\n  -p 8080:8080 \\\n  -v ./models:/models \\\n  -e MODEL_PATH=/models/llama-3.1-70b \\\n  deployr/llama-runner:latest\n\n# API 엔드포인트 테스트\ncurl localhost:8080/v1/chat \\n  -d '{"model":"llama-3.1","messages":[...]}'` },
         { q: '파인튜닝 비용을 계산해줘', a: '70B 모델 파인튜닝 견적:\n• 데이터 준비: 1,000 샘플 기준\n• GPU 시간: A100 × 8 × 12h = 96 GPU-h\n• Deployr 비용: ₩480,000\n• 예상 학습 시간: 8-12시간\n\n✓ 커스텀 모델로 정확도 35% 향상 예상' }
