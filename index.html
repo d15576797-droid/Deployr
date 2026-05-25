@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deployr — 배포를 더 빠르게</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --text-primary: #111110;
+    --text-secondary: #6b6a65;
+    --text-muted: #a3a29c;
+    --accent: #1a1a18;
+    --accent-blue: #2563eb;
+    --accent-blue-light: #dbeafe;
+    --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.14);
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-xl: none;
+    --radius-sm: 10px;
+    --radius: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    font-size: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 64px;
+    background: rgba(247,246,242,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 18px; letter-spacing: -0.5px;
+    color: var(--text-primary); text-decoration: none;
+  }
+  .nav-logo svg { flex-shrink: 0; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    font-size: 14px; font-weight: 500; color: var(--text-secondary);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text-primary); }
+  .nav-actions { display: flex; align-items: center; gap: 12px; }
+  .btn-ghost {
+    padding: 8px 18px; border-radius: 50px; font-size: 14px; font-weight: 500;
+    background: transparent; border: 1px solid var(--border-strong);
+    color: var(--text-primary); cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: inline-flex; align-items: center;
+  }
+  .btn-ghost:hover { background: var(--surface); box-shadow: var(--shadow-sm); }
+  .btn-primary {
+    padding: 8px 20px; border-radius: 50px; font-size: 14px; font-weight: 600;
+    background: var(--text-primary); color: white; border: none;
+    cursor: pointer; transition: all 0.2s; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-primary:hover { background: #2a2a28; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 120px 24px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(60px); opacity: 0.25;
+  }
+  .hero-orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #93c5fd, #3b82f6);
+    top: -200px; right: -150px;
+    animation: float1 8s ease-in-out infinite;
+  }
+  .hero-orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, #c4b5fd, #8b5cf6);
+    bottom: -100px; left: -100px;
+    animation: float2 10s ease-in-out infinite;
+  }
+  .hero-orb-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, #6ee7b7, #059669);
+    top: 40%; left: 10%;
+    animation: float3 12s ease-in-out infinite;
+  }
+  @keyframes float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-30px,20px) scale(1.05)} }
+  @keyframes float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(20px,-30px) scale(0.95)} }
+  @keyframes float3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,30px)} }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface); border: 1px solid var(--border-strong);
+    border-radius: 50px; padding: 6px 16px 6px 8px;
+    font-size: 13px; font-weight: 500; color: var(--text-secondary);
+    margin-bottom: 32px; box-shadow: var(--shadow-sm);
+    animation: fadeSlideDown 0.8s ease both;
+  }
+  .hero-badge-dot {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #22c55e; display: flex; align-items: center; justify-content: center;
+    animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot {
+    0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.4)}
+    50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}
+  }
+  .hero-title {
+    font-size: clamp(48px, 7vw, 88px); font-weight: 700;
+    letter-spacing: -3px; line-height: 1.0; text-align: center;
+    max-width: 900px; margin-bottom: 24px;
+    animation: fadeSlideDown 0.8s 0.15s ease both;
+  }
+  .hero-title .highlight {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-desc {
+    font-size: 18px; color: var(--text-secondary); text-align: center;
+    max-width: 520px; line-height: 1.65; margin-bottom: 40px;
+    animation: fadeSlideDown 0.8s 0.25s ease both;
+  }
+  .hero-actions {
+    display: flex; align-items: center; gap: 12px;
+    animation: fadeSlideDown 0.8s 0.35s ease both;
+    margin-bottom: 80px;
+  }
+  .btn-large {
+    padding: 16px 32px; border-radius: 50px;
+    font-size: 15px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary-large {
+    background: var(--text-primary); color: white; border: none;
+    cursor: pointer; transition: all 0.25s; text-decoration: none;
+    padding: 16px 32px; border-radius: 50px;
+    font-size: 15px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary-large:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); background: #1a1a18; }
+  .btn-outline-large {
+    background: transparent; color: var(--text-primary);
+    border: 1px solid var(--border-strong); cursor: pointer; transition: all 0.25s;
+    text-decoration: none; padding: 16px 32px; border-radius: 50px;
+    font-size: 15px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-outline-large:hover { background: var(--surface); box-shadow: var(--shadow-sm); }
+
+  @keyframes fadeSlideDown {
+    from { opacity:0; transform:translateY(-20px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  /* 3D CARD MOCKUP */
+  .hero-3d-container {
+    width: 100%; max-width: 860px;
+    perspective: 1200px;
+    animation: fadeSlideDown 0.8s 0.5s ease both;
+  }
+  .hero-3d-scene {
+    transform-style: preserve-3d;
+    transform: rotateX(12deg) rotateY(-4deg);
+    transition: transform 0.6s ease;
+  }
+  .hero-3d-scene:hover {
+    transform: rotateX(6deg) rotateY(-2deg);
+  }
+  .hero-card-main {
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+  }
+  .hero-card-toolbar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 16px 24px; border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .toolbar-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .toolbar-dot-red { background: #ff5f57; }
+  .toolbar-dot-yellow { background: #febc2e; }
+  .toolbar-dot-green { background: #28c840; }
+  .toolbar-url {
+    flex: 1; margin: 0 16px;
+    background: var(--bg); border-radius: 8px;
+    padding: 6px 14px; font-size: 12px; color: var(--text-muted);
+    border: 1px solid var(--border); text-align: center;
+  }
+  .toolbar-icon { width: 28px; height: 28px; border-radius: 6px; background: var(--bg); display: flex; align-items: center; justify-content: center; }
+
+  .terminal-body {
+    background: #0d1117; color: #e6edf3;
+    padding: 28px 32px; font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px; line-height: 1.8; min-height: 240px;
+  }
+  .term-line { display: flex; align-items: flex-start; gap: 8px; }
+  .term-prompt { color: #7ee787; flex-shrink: 0; }
+  .term-cmd { color: #79c0ff; }
+  .term-output { color: #8b949e; padding-left: 16px; }
+  .term-success { color: #7ee787; padding-left: 16px; }
+  .term-cursor {
+    display: inline-block; width: 8px; height: 14px;
+    background: #7ee787; vertical-align: -2px;
+    animation: blink 1s step-end infinite; margin-left: 2px;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .hero-card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 24px; border-top: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .footer-status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #dcfce7; color: #15803d; border-radius: 50px;
+    padding: 3px 10px; font-size: 12px; font-weight: 600;
+  }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: pulse-dot 2s infinite; }
+
+  /* FLOATING CARDS */
+  .float-card {
+    position: absolute;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    font-size: 13px;
+    transform-style: preserve-3d;
+    transform: translateZ(40px);
+  }
+  .float-card-1 {
+    right: -60px; top: 30%;
+    animation: floatCard1 5s ease-in-out infinite;
+    min-width: 180px;
+  }
+  .float-card-2 {
+    left: -50px; bottom: 20%;
+    animation: floatCard2 6s ease-in-out infinite;
+    min-width: 160px;
+  }
+  @keyframes floatCard1 { 0%,100%{transform:translateZ(40px) translateY(0)} 50%{transform:translateZ(40px) translateY(-12px)} }
+  @keyframes floatCard2 { 0%,100%{transform:translateZ(40px) translateY(0)} 50%{transform:translateZ(40px) translateY(10px)} }
+  .float-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+  .float-value { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .float-value.green { color: #16a34a; }
+  .float-value.blue { color: #2563eb; }
+  .float-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* STATS */
+  .stats-section {
+    padding: 80px 48px;
+    display: flex; justify-content: center;
+  }
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
+    max-width: 860px; width: 100%;
+  }
+  .stat-item {
+    background: var(--surface); padding: 40px 32px;
+    transition: background 0.2s;
+  }
+  .stat-item:hover { background: var(--surface2); }
+  .stat-number { font-size: 40px; font-weight: 700; letter-spacing: -2px; }
+  .stat-unit { font-size: 24px; font-weight: 600; color: var(--text-secondary); }
+  .stat-desc { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
+
+  /* SECTION BASE */
+  section { padding: 100px 48px; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--accent-blue);
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 20px;
+  }
+  .section-title {
+    font-size: clamp(32px, 4vw, 52px); font-weight: 700;
+    letter-spacing: -2px; line-height: 1.1; margin-bottom: 20px;
+    max-width: 640px;
+  }
+  .section-desc {
+    font-size: 17px; color: var(--text-secondary); max-width: 520px;
+    line-height: 1.65; margin-bottom: 60px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* FEATURE CARDS */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .feature-card {
+    background: var(--surface); border-radius: var(--radius-lg);
+    border: 1px solid var(--border); padding: 32px;
+    transition: all 0.3s; cursor: default;
+    position: relative; overflow: hidden;
+  }
+  .feature-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(37,99,235,0.04), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--border-strong); }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: var(--radius-sm);
+    background: var(--surface2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; transition: all 0.3s;
+  }
+  .feature-card:hover .feature-icon { background: var(--accent-blue-light); border-color: rgba(37,99,235,0.2); }
+  .feature-card:hover .feature-icon svg { stroke: var(--accent-blue); }
+  .feature-name { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 8px; }
+  .feature-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+  /* 3D BENTO SECTION */
+  .bento-section { background: var(--text-primary); padding: 100px 48px; }
+  .bento-section .section-title { color: white; }
+  .bento-section .section-desc { color: rgba(255,255,255,0.5); }
+  .bento-section .section-label { color: #60a5fa; }
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto;
+    gap: 16px;
+  }
+  .bento-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg); padding: 32px;
+    transition: all 0.3s; overflow: hidden; position: relative;
+  }
+  .bento-card:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.16); transform: translateY(-3px); }
+  .bento-card-1 { grid-column: span 7; }
+  .bento-card-2 { grid-column: span 5; }
+  .bento-card-3 { grid-column: span 4; }
+  .bento-card-4 { grid-column: span 4; }
+  .bento-card-5 { grid-column: span 4; }
+  .bento-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.1); border-radius: 50px;
+    padding: 4px 12px; font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,0.7); margin-bottom: 16px;
+  }
+  .bento-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 10px; letter-spacing: -0.4px; }
+  .bento-desc { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.6; }
+
+  /* PIPELINE VIZ */
+  .pipeline {
+    display: flex; align-items: center; gap: 0;
+    margin-top: 28px; position: relative;
+  }
+  .pipe-step {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    flex: 1;
+  }
+  .pipe-node {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; transition: all 0.3s;
+  }
+  .pipe-node.active {
+    background: var(--accent-blue); border-color: rgba(37,99,235,0.5);
+  }
+  .pipe-node.done {
+    background: rgba(34,197,94,0.2); border-color: rgba(34,197,94,0.4);
+  }
+  .pipe-label { font-size: 11px; color: rgba(255,255,255,0.45); font-weight: 500; }
+  .pipe-connector {
+    flex: 1; height: 1px; background: rgba(255,255,255,0.1); position: relative; top: -16px;
+  }
+  .pipe-connector.done { background: rgba(34,197,94,0.4); }
+  .pipe-connector.active {
+    background: linear-gradient(90deg, rgba(34,197,94,0.4), var(--accent-blue));
+  }
+
+  /* METRICS VIZ */
+  .metrics-bars { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+  .metric-row { display: flex; align-items: center; gap: 12px; }
+  .metric-bar-label { font-size: 12px; color: rgba(255,255,255,0.5); width: 60px; flex-shrink: 0; }
+  .metric-bar-track {
+    flex: 1; height: 6px; background: rgba(255,255,255,0.08);
+    border-radius: 3px; overflow: hidden;
+  }
+  .metric-bar-fill {
+    height: 100%; border-radius: 3px;
+    animation: fillBar 1.5s ease forwards;
+  }
+  @keyframes fillBar { from{width:0} }
+  .metric-val { font-size: 12px; color: rgba(255,255,255,0.6); width: 36px; text-align: right; flex-shrink: 0; }
+
+  /* UPTIME BLOCKS */
+  .uptime-blocks { display: flex; gap: 3px; margin-top: 16px; flex-wrap: wrap; }
+  .uptime-block {
+    width: 10px; height: 28px; border-radius: 3px;
+    background: rgba(34,197,94,0.7);
+    transition: all 0.2s;
+  }
+  .uptime-block:hover { transform: scaleY(1.3); }
+  .uptime-block.down { background: rgba(239,68,68,0.5); }
+  .uptime-block.warn { background: rgba(234,179,8,0.6); }
+
+  /* PRICING - ENHANCED 3D */
+  .pricing-section {
+    background: #060810;
+    position: relative; overflow: hidden;
+    padding: 120px 48px;
+  }
+  .pricing-section .section-label { color: #60a5fa; }
+  .pricing-section .section-title { color: white; }
+  .pricing-section .section-desc { color: rgba(255,255,255,0.45); }
+
+  /* animated grid background */
+  .pricing-section-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(37,99,235,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(37,99,235,0.07) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+  .pricing-section-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 700px 500px at 15% 60%, rgba(37,99,235,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 600px 400px at 85% 25%, rgba(124,58,237,0.14) 0%, transparent 65%),
+      radial-gradient(ellipse 400px 350px at 55% 85%, rgba(16,185,129,0.09) 0%, transparent 65%);
+  }
+
+  /* 3D scene wrapper — perspective lives here */
+  .pricing-3d-scene {
+    perspective: 1800px;
+    perspective-origin: 50% 35%;
+  }
+
+  .pricing-grid-3d {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 28px; max-width: 1000px;
+    transform-style: preserve-3d;
+    /* slight downward tilt on the whole grid */
+    transform: rotateX(4deg);
+    transition: transform 0.8s cubic-bezier(.22,.68,0,1.2);
+  }
+  .pricing-3d-scene:hover .pricing-grid-3d {
+    transform: rotateX(1deg);
+  }
+
+  /* each card is a real 3-D slab with side/bottom faces */
+  .pricing-card-3d {
+    position: relative;
+    transform-style: preserve-3d;
+    border-radius: 24px;
+    cursor: default;
+    transition: transform 0.55s cubic-bezier(.22,.68,0,1.25), filter 0.4s ease;
+    transform: translateZ(0px);
+    will-change: transform;
+  }
+  .pricing-card-3d:hover {
+    transform: translateZ(44px) translateY(-8px);
+    filter: brightness(1.06);
+    z-index: 3;
+  }
+  .pricing-card-3d.featured-3d {
+    transform: translateZ(48px) translateY(-6px) scale(1.04);
+    z-index: 2;
+  }
+  .pricing-card-3d.featured-3d:hover {
+    transform: translateZ(76px) translateY(-14px) scale(1.05);
+    filter: brightness(1.1);
+  }
+
+  /* card face (front) */
+  .pricing-card-face {
+    border-radius: 24px;
+    padding: 40px 34px 36px;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+  .pricing-card-3d:not(.featured-3d) .pricing-card-face {
+    background: linear-gradient(160deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.025) 100%);
+    border: 1px solid rgba(255,255,255,0.11);
+  }
+  .pricing-card-3d.featured-3d .pricing-card-face {
+    background: linear-gradient(148deg, #1e3faf 0%, #1d4ed8 35%, #2563eb 65%, #4080ff 100%);
+    border: 1px solid rgba(120,165,255,0.5);
+  }
+
+  /* top-edge light sheen */
+  .pricing-card-face::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 45%;
+    border-radius: 24px 24px 0 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.13) 0%, transparent 100%);
+    pointer-events: none;
+  }
+  /* inner specular dot */
+  .pricing-card-face::after {
+    content: ''; position: absolute; top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 120px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* 3-D bottom/side slab thickness */
+  .pricing-card-3d .card-side-bottom {
+    position: absolute; bottom: -14px; left: 6px; right: 6px;
+    height: 18px; border-radius: 0 0 22px 22px;
+    transform: rotateX(90deg) translateZ(-9px);
+    background: rgba(0,0,0,0.5);
+    filter: blur(0px);
+    pointer-events: none;
+  }
+  .pricing-card-3d.featured-3d .card-side-bottom {
+    background: rgba(20,50,180,0.6);
+  }
+
+  /* drop shadow that deepens on hover */
+  .pricing-card-3d::after {
+    content: ''; position: absolute;
+    bottom: -20px; left: 8%; right: 8%;
+    height: 28px; border-radius: 50%;
+    background: rgba(0,0,0,0.45);
+    filter: blur(16px);
+    z-index: -1;
+    transition: all 0.5s ease;
+    opacity: 0.7;
+  }
+  .pricing-card-3d:hover::after {
+    bottom: -30px; left: 5%; right: 5%;
+    filter: blur(22px);
+    opacity: 0.9;
+  }
+  .pricing-card-3d.featured-3d::after {
+    background: rgba(37,99,235,0.7);
+    filter: blur(28px);
+    bottom: -28px; opacity: 1;
+  }
+  .pricing-card-3d.featured-3d:hover::after {
+    bottom: -40px;
+    filter: blur(36px);
+  }
+
+  /* particle shimmer on featured card */
+  @keyframes shimmer-slide {
+    0% { transform: translateX(-100%) rotate(30deg); }
+    100% { transform: translateX(300%) rotate(30deg); }
+  }
+  .featured-3d .pricing-card-face .shimmer {
+    position: absolute; top: 0; left: 0; width: 40%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    animation: shimmer-slide 3.5s ease-in-out infinite;
+    pointer-events: none; z-index: 1;
+  }
+
+  .plan-name { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.40); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 2px; }
+  .plan-name.white { color: rgba(255,255,255,0.70); }
+  .plan-price { font-size: 56px; font-weight: 800; letter-spacing: -3px; margin-bottom: 4px; color: white; line-height: 1; }
+  .plan-price sup { font-size: 22px; font-weight: 600; vertical-align: top; margin-top: 14px; display: inline-block; color: rgba(255,255,255,0.65); letter-spacing: 0; }
+  .plan-period { font-size: 13px; color: rgba(255,255,255,0.35); margin-bottom: 28px; }
+  .plan-period.white { color: rgba(255,255,255,0.60); }
+  .plan-divider { height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 24px; }
+  .plan-divider.white { background: rgba(255,255,255,0.20); }
+  .plan-features { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+  .plan-feature { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: rgba(255,255,255,0.65); }
+  .plan-feature-icon { flex-shrink: 0; margin-top: 1px; }
+  .plan-feature-icon-bg {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(34,197,94,0.15);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .featured-3d .plan-feature-icon-bg { background: rgba(255,255,255,0.18); }
+
+  .plan-cta {
+    width: 100%; padding: 15px; border-radius: 16px;
+    font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    position: relative; overflow: hidden; letter-spacing: -0.2px;
+  }
+  .plan-cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.14), transparent 55%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .plan-cta:hover::before { opacity: 1; }
+  .plan-cta-outline {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.16);
+    color: rgba(255,255,255,0.88);
+  }
+  .plan-cta-outline:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.28);
+    transform: translateY(-2px);
+  }
+  .plan-cta-white {
+    background: white; color: #1d4ed8; border: none;
+    font-weight: 800;
+  }
+  .plan-cta-white:hover {
+    background: #eef5ff;
+    transform: translateY(-3px);
+  }
+
+  .plan-badge {
+    position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(90deg, #60a5fa, #a78bfa);
+    color: white; border-radius: 50px;
+    padding: 6px 20px; font-size: 11px; font-weight: 800;
+    white-space: nowrap; letter-spacing: 0.8px; text-transform: uppercase;
+  }
+
+  /* floating particle orbs behind pricing */
+  .pricing-orb {
+    position: absolute; border-radius: 50%; pointer-events: none;
+    filter: blur(100px); opacity: 0.22;
+  }
+  .pricing-orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #3b82f6, #1d4ed8);
+    top: -150px; left: -200px;
+    animation: float1 10s ease-in-out infinite;
+  }
+  .pricing-orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, #a78bfa, #7c3aed);
+    bottom: -100px; right: -100px;
+    animation: float2 13s ease-in-out infinite;
+  }
+  .pricing-orb-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, #34d399, #059669);
+    top: 50%; right: 20%;
+    animation: float3 9s ease-in-out infinite;
+    opacity: 0.12;
+  }
+
+  /* plan highlights / pill tags */
+  .plan-highlight {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 50px; padding: 4px 12px;
+    font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5);
+    margin-bottom: 22px; letter-spacing: 0.3px;
+  }
+  .featured-3d .plan-highlight {
+    background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.28);
+    color: rgba(255,255,255,0.90);
+  }
+
+  /* pricing toggle */
+  .pricing-toggle-wrap {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 60px;
+    font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.5);
+  }
+  .pricing-toggle {
+    position: relative; width: 44px; height: 24px; cursor: pointer;
+  }
+  .pricing-toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0; border-radius: 50px;
+    background: rgba(255,255,255,0.15); transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .toggle-slider::before {
+    content: ''; position: absolute; width: 18px; height: 18px;
+    left: 3px; top: 2px; background: white; border-radius: 50%;
+    transition: 0.3s;
+  }
+  .pricing-toggle input:checked + .toggle-slider { background: #2563eb; border-color: #3b82f6; }
+  .pricing-toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+  .pricing-discount {
+    background: rgba(34,197,94,0.15); color: #4ade80;
+    border-radius: 50px; padding: 2px 10px; font-size: 12px; font-weight: 700;
+  }
+
+  /* AI DROPDOWN */
+  .ai-dropdown-wrap { margin-bottom: 40px; position: relative; z-index: 500; }
+  .ai-dropdown {
+    position: relative; display: inline-block; min-width: 220px;
+    user-select: none; z-index: 500;
+  }
+  .ai-dropdown-selected {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px; border-radius: 14px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: white; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .ai-dropdown-selected:hover { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.25); }
+  .ai-dropdown-arrow { margin-left: auto; color: rgba(255,255,255,0.4); transition: transform 0.25s; }
+  .ai-dropdown.open .ai-dropdown-arrow { transform: rotate(180deg); }
+  .ai-dropdown-menu {
+    position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+    background: #161b27; border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px; overflow: hidden;
+    opacity: 0; pointer-events: none; transform: translateY(-8px);
+    transition: all 0.2s cubic-bezier(.22,.68,0,1.2);
+    z-index: 9999;
+  }
+  .ai-dropdown.open .ai-dropdown-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
+  .ai-dropdown-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px; font-size: 14px; font-weight: 500;
+    color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s;
+  }
+  .ai-dropdown-item:hover { background: rgba(255,255,255,0.07); color: white; }
+  .ai-dropdown-item.active { color: white; background: rgba(99,102,241,0.15); }
+
+  /* AI DEMO SECTION */
+  .ai-demo-section {
+    background: #060810; padding: 120px 48px;
+    position: relative; overflow: visible;
+  }
+  .ai-demo-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.06) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+  .ai-demo-section::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 10% 50%, rgba(99,102,241,0.15) 0%, transparent 65%),
+      radial-gradient(ellipse 500px 350px at 90% 30%, rgba(16,185,129,0.10) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .ai-tab-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  .ai-demo-grid {
+    display: grid; grid-template-columns: 380px 1fr; gap: 24px;
+    margin-bottom: 40px;
+  }
+  .ai-model-info {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 24px; padding: 32px;
+    transition: all 0.4s;
+  }
+  .ai-model-header {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+  }
+  .ai-model-icon {
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.4s;
+  }
+  .ai-model-name { font-size: 20px; font-weight: 700; color: white; letter-spacing: -0.5px; }
+  .ai-model-maker { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+  .ai-model-badge {
+    margin-left: auto; padding: 4px 12px; border-radius: 50px;
+    font-size: 11px; font-weight: 700; border: 1px solid;
+    letter-spacing: 0.3px; white-space: nowrap;
+    transition: all 0.4s;
+  }
+  .ai-model-desc {
+    font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7;
+    margin-bottom: 28px; padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .ai-model-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .ai-spec-item {}
+  .ai-spec-label { font-size: 11px; color: rgba(255,255,255,0.35); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .ai-spec-value { font-size: 14px; color: rgba(255,255,255,0.8); font-weight: 600; }
+
+  .ai-qa-panel {
+    background: #0d1117;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 24px; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .ai-qa-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.03);
+  }
+  .ai-qa-dots { display: flex; gap: 6px; }
+  .ai-qa-title { flex: 1; font-size: 13px; color: rgba(255,255,255,0.4); font-family: 'SF Mono','Fira Code',monospace; }
+  .ai-qa-badge {
+    padding: 3px 10px; border-radius: 50px;
+    font-size: 11px; font-weight: 700;
+    background: rgba(99,102,241,0.2); color: #818cf8;
+    border: 1px solid rgba(99,102,241,0.3);
+  }
+  .ai-qa-body { padding: 28px; display: flex; flex-direction: column; gap: 20px; flex: 1; overflow-y: auto; }
+  .ai-qa-item {}
+  .ai-qa-q {
+    display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;
+  }
+  .ai-qa-avatar-user {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: white;
+  }
+  .ai-qa-bubble-user {
+    background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.25);
+    border-radius: 14px 14px 14px 4px;
+    padding: 12px 16px; font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.6;
+    max-width: 90%;
+  }
+  .ai-qa-a {
+    display: flex; align-items: flex-start; gap: 12px; flex-direction: row-reverse;
+  }
+  .ai-qa-avatar-ai {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: white;
+    transition: all 0.4s;
+  }
+  .ai-qa-bubble-ai {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 14px 14px 4px 14px;
+    padding: 12px 16px; font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.7;
+    max-width: 90%; font-family: 'SF Mono','Fira Code',monospace; font-size: 13px;
+  }
+  .ai-pills {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .ai-pill {
+    padding: 8px 18px; border-radius: 50px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10);
+    font-size: 13px; color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  /* DATA SECTION */
+  .data-section {
+    padding: 100px 48px; background: var(--bg);
+    position: relative; overflow: hidden;
+  }
+  .data-section-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(37,99,235,0.06) 0%, transparent 70%);
+  }
+  .data-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .data-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 28px; text-align: center;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .data-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(37,99,235,0.03), transparent);
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .data-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .data-card:hover::before { opacity: 1; }
+  .data-card-icon {
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .data-card-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
+  .data-card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+  .data-btn {
+    padding: 10px 24px; border-radius: 50px; font-size: 13px; font-weight: 700;
+    background: var(--text-primary); color: white; border: none;
+    cursor: pointer; transition: all 0.25s; letter-spacing: -0.2px;
+  }
+  .data-btn:hover { transform: translateY(-2px); }
+
+  /* POPUPS */
+  .popup-overlay {
+    position: fixed; inset: 0; z-index: 99999;
+    background: rgba(0,0,0,0.65); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    padding: 24px;
+  }
+  .popup-overlay.active { opacity: 1; pointer-events: all; }
+  .popup-box {
+    background: var(--surface); border-radius: 24px;
+    border: 1px solid var(--border);
+    padding: 36px; max-width: 560px; width: 100%;
+    position: relative;
+    transform: scale(0.92) translateY(20px); transition: all 0.35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .popup-overlay.active .popup-box { transform: scale(1) translateY(0); }
+  .popup-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text-secondary); font-size: 14px;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .popup-close:hover { background: var(--border); }
+  .popup-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+  .popup-icon { font-size: 36px; }
+  .popup-title { font-size: 18px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 4px; }
+  .popup-author { font-size: 13px; color: var(--text-muted); }
+  .popup-content { background: var(--surface2); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+  .popup-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .popup-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .popup-row-label { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+  .popup-row-value { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+  .popup-row-value.green { color: #16a34a; }
+  .popup-row-value.blue { color: #2563eb; }
+  .popup-footer { display: flex; align-items: center; justify-content: space-between; }
+  .popup-supabase-badge {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 50px;
+    background: rgba(62,207,142,0.1); border: 1px solid rgba(62,207,142,0.25);
+    font-size: 12px; font-weight: 600; color: #3ECF8E;
+  }
+  .popup-timestamp { font-size: 12px; color: var(--text-muted); }
+
+  /* TESTIMONIALS */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .testimonial-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 28px;
+    transition: all 0.3s;
+  }
+  .testimonial-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .testimonial-stars { display: flex; gap: 3px; margin-bottom: 16px; }
+  .testimonial-text { font-size: 15px; line-height: 1.65; color: var(--text-secondary); margin-bottom: 20px; }
+  .testimonial-author { display: flex; align-items: center; gap: 12px; }
+  .author-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .author-name { font-size: 14px; font-weight: 600; }
+  .author-role { font-size: 13px; color: var(--text-muted); }
+
+  /* CTA SECTION */
+  .cta-section {
+    background: var(--text-primary);
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; padding: 120px 48px;
+    position: relative; overflow: hidden;
+  }
+  .cta-bg-lines {
+    position: absolute; inset: 0; opacity: 0.06;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.5) 39px, rgba(255,255,255,0.5) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.5) 39px, rgba(255,255,255,0.5) 40px);
+  }
+  .cta-title { font-size: clamp(36px, 5vw, 64px); font-weight: 700; letter-spacing: -2px; line-height: 1.1; color: white; margin-bottom: 20px; max-width: 700px; }
+  .cta-desc { font-size: 18px; color: rgba(255,255,255,0.5); margin-bottom: 48px; max-width: 480px; }
+  .cta-input-group {
+    display: flex; gap: 8px; max-width: 460px; width: 100%; margin-bottom: 16px;
+  }
+  .cta-input {
+    flex: 1; padding: 16px 20px; border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.08);
+    color: white; font-size: 15px; outline: none;
+    font-family: inherit; transition: all 0.2s;
+  }
+  .cta-input::placeholder { color: rgba(255,255,255,0.3); }
+  .cta-input:focus { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.1); }
+  .cta-note { font-size: 13px; color: rgba(255,255,255,0.3); }
+
+  /* FOOTER */
+  footer {
+    padding: 48px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--bg);
+  }
+  .footer-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; letter-spacing: -0.3px; }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a { font-size: 14px; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text-primary); }
+  .footer-copy { font-size: 13px; color: var(--text-muted); }
+
+  /* SCROLL ANIMATIONS */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+    section, .stats-section, .bento-section, .ai-demo-section, .data-section { padding: 60px 24px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .features-grid { grid-template-columns: 1fr; }
+    .bento-grid { grid-template-columns: 1fr; }
+    .bento-card-1,.bento-card-2,.bento-card-3,.bento-card-4,.bento-card-5 { grid-column: span 1; }
+    .ai-demo-grid { grid-template-columns: 1fr; }
+    .data-cards { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 24px; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+    .float-card { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="8" fill="#111110"/>
+      <path d="M8 14.5L13 19.5L20 10.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="22" cy="8" r="3" fill="#2563eb"/>
+    </svg>
+    Deployr
+  </a>
+  <div class="nav-links">
+    <a href="#ai-demo">기능</a>
+    <a href="pricing.html">요금제</a>
+    <a href="docs.html">문서</a>
+    <a href="blog.html">블로그</a>
+    <a href="company.html">회사소개</a>
+  </div>
+  <div class="nav-actions">
+    <a href="#" class="btn-ghost">로그인</a>
+    <a href="#" class="btn-primary">
+      무료 시작
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+  </div>
+
+  <div class="hero-badge">
+    <div class="hero-badge-dot">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="2.5" fill="white"/></svg>
+    </div>
+    v2.4 출시 — 제로 다운타임 배포 지원
+  </div>
+
+  <h1 class="hero-title">
+    배포를<br><span class="highlight">더 빠르게,</span><br>더 안전하게
+  </h1>
+  <p class="hero-desc">
+    코드를 작성하는 순간부터 실제 서비스까지.<br>
+    Deployr가 복잡한 인프라를 대신 처리합니다.
+  </p>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary-large" onclick="showUnavailablePopup(event)">
+      무료로 시작하기
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="#ai-demo" class="btn-outline-large">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      데모 보기
+    </a>
+  </div>
+
+  <!-- 3D MOCKUP -->
+  <div class="hero-3d-container">
+    <div class="hero-3d-scene" id="heroScene">
+      <div class="hero-card-main">
+        <div class="hero-card-toolbar">
+          <span class="toolbar-dot toolbar-dot-red"></span>
+          <span class="toolbar-dot toolbar-dot-yellow"></span>
+          <span class="toolbar-dot toolbar-dot-green"></span>
+          <div class="toolbar-url">https://myapp.deployr.run</div>
+          <div class="toolbar-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L9.5 5.5H13L9.5 8.5L11 13L7 10L3 13L4.5 8.5L1 5.5H4.5L7 1Z" stroke="#888" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="terminal-body">
+          <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd"> deployr push main</span></div>
+          <div class="term-output">Connecting to Deployr cloud...</div>
+          <div class="term-output">Analyzing project structure...</div>
+          <div class="term-output">Building Docker image [████████████████████] 100%</div>
+          <div class="term-output">Running tests... 47 passed, 0 failed</div>
+          <div class="term-output">Pushing to registry: sha256:a3f8c2...</div>
+          <div class="term-output">Spinning up 3 replicas across zones KR, SG, JP...</div>
+          <div class="term-success">✓ Health checks passed (2.1s)</div>
+          <div class="term-success">✓ DNS propagated — live at myapp.deployr.run</div>
+          <div class="term-line"><span class="term-prompt">$</span><span class="term-cursor"></span></div>
+        </div>
+        <div class="hero-card-footer">
+          <div class="footer-status">
+            <div class="status-badge">
+              <div class="status-dot"></div>
+              배포 완료
+            </div>
+            <span>2.1초 만에 완료</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-muted);">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1C3.68 1 1 3.68 1 7s2.68 6 6 6 6-2.68 6-6-2.68-6-6-6zm0 3v4L9.5 9.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            방금 전
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating cards -->
+      <div class="float-card float-card-1">
+        <div class="float-label">업타임</div>
+        <div class="float-value green">99.99%</div>
+        <div class="float-sub">지난 30일</div>
+      </div>
+      <div class="float-card float-card-2">
+        <div class="float-label">평균 배포 시간</div>
+        <div class="float-value blue">1.8s</div>
+        <div class="float-sub">전 달 대비 40% 빠름</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-item reveal">
+      <div class="stat-number">12<span class="stat-unit">만+</span></div>
+      <div class="stat-desc">개발자가 선택한 배포 플랫폼</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <div class="stat-number">2<span class="stat-unit">초</span></div>
+      <div class="stat-desc">평균 배포 소요 시간</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <div class="stat-number">99<span class="stat-unit">.99%</span></div>
+      <div class="stat-desc">글로벌 SLA 업타임 보장</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <div class="stat-number">30<span class="stat-unit">개</span></div>
+      <div class="stat-desc">전 세계 엣지 리전</div>
+    </div>
+  </div>
+</div>
+
+<!-- AI DEMO SECTION -->
+<section class="ai-demo-section" id="ai-demo">
+  <div class="ai-demo-bg"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="reveal">
+      <div class="section-label" style="background:none;border:none;padding:0;box-shadow:none;">✦ AI 체험</div>
+      <h2 class="section-title" style="color:white;">AI 모델을<br>체험해보세요</h2>
+      <p class="section-desc" style="color:rgba(255,255,255,0.5);">Deployr에 내장된 AI 모델들의 실제 응답 예시를 확인하세요.</p>
+    </div>
+
+    <!-- Model dropdown -->
+    <div class="ai-dropdown-wrap reveal">
+      <div class="ai-dropdown" id="aiDropdown" onclick="toggleDropdown()">
+        <div class="ai-dropdown-selected">
+          <span id="dropdownLabel">GPT-4o</span>
+          <svg class="ai-dropdown-arrow" id="dropdownArrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="ai-dropdown-menu" id="dropdownMenu">
+          <div class="ai-dropdown-item active" onclick="selectModel(event,0)">GPT-4o</div>
+          <div class="ai-dropdown-item" onclick="selectModel(event,1)">Claude 3.5</div>
+          <div class="ai-dropdown-item" onclick="selectModel(event,2)">Gemini 1.5</div>
+          <div class="ai-dropdown-item" onclick="selectModel(event,3)">Llama 3.1</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Model demo cards -->
+    <div class="ai-demo-grid">
+
+      <!-- Left: Model info -->
+      <div class="ai-model-info reveal">
+        <div class="ai-model-header" id="modelHeader">
+          <div class="ai-model-icon" id="modelIcon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="10" stroke="white" stroke-width="1.8"/><path d="M10 14l3 3 5-6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="ai-model-name" id="modelName">GPT-4o</div>
+            <div class="ai-model-maker" id="modelMaker">OpenAI</div>
+          </div>
+          <div class="ai-model-badge" id="modelBadge" style="display:none;"></div>
+        </div>
+        <div class="ai-model-desc" id="modelDesc">
+          OpenAI의 플래그십 멀티모달 모델. 텍스트, 이미지, 코드를 동시에 이해하며 복잡한 추론과 창의적 작업에서 탁월한 성능을 발휘합니다.
+        </div>
+        <div class="ai-model-specs">
+          <div class="ai-spec-item">
+            <div class="ai-spec-label">컨텍스트</div>
+            <div class="ai-spec-value" id="specContext">128K 토큰</div>
+          </div>
+          <div class="ai-spec-item">
+            <div class="ai-spec-label">응답 속도</div>
+            <div class="ai-spec-value" id="specSpeed">빠름</div>
+          </div>
+          <div class="ai-spec-item">
+            <div class="ai-spec-label">특화 분야</div>
+            <div class="ai-spec-value" id="specSpecialty">멀티모달</div>
+          </div>
+          <div class="ai-spec-item">
+            <div class="ai-spec-label">언어 지원</div>
+            <div class="ai-spec-value">100+</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Q&A demo -->
+      <div class="ai-qa-panel reveal reveal-delay-1">
+        <div class="ai-qa-header">
+          <div class="ai-qa-dots">
+            <span style="background:#ff5f57;width:10px;height:10px;border-radius:50%;display:inline-block;"></span>
+            <span style="background:#febc2e;width:10px;height:10px;border-radius:50%;display:inline-block;"></span>
+            <span style="background:#28c840;width:10px;height:10px;border-radius:50%;display:inline-block;"></span>
+          </div>
+          <div class="ai-qa-title" id="qaTitle">GPT-4o 대화</div>
+        </div>
+        <div class="ai-qa-body" id="qaBody">
+          <!-- Q&A items injected by JS -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- DATA COLLECTION SECTION -->
+<section class="data-section">
+  <div class="data-section-bg"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="reveal" style="text-align:center;">
+      <div class="section-label" style="justify-content:center;">📊 데이터 수집</div>
+      <h2 class="section-title" style="text-align:center;margin:0 auto 16px;">인사이트 데이터를<br>수집하세요</h2>
+      <p class="section-desc" style="text-align:center;margin:0 auto 48px;">팀의 배포 패턴, AI 모델 사용률, 성능 지표를 한눈에.<br>데이터를 기반으로 더 나은 의사결정을 내리세요.</p>
+    </div>
+    <div class="data-cards">
+      <div class="data-card">
+        <div class="data-card-icon">
+          <svg width="28" height="28" viewBox="0 0 20 20" fill="none"><rect x="2" y="10" width="3" height="8" rx="1" fill="#111110"/><rect x="7" y="6" width="3" height="12" rx="1" fill="#111110"/><rect x="12" y="3" width="3" height="15" rx="1" fill="#111110"/><rect x="17" y="1" width="3" height="17" rx="1" fill="#111110" opacity="0.4"/></svg>
+        </div>
+        <div class="data-card-title">배포 분석</div>
+        <div class="data-card-desc">배포 빈도, 성공률, 평균 소요시간 추적</div>
+        <button class="data-btn" onclick="showUnavailablePopup(event)">Data 보기</button>
+      </div>
+      <div class="data-card">
+        <div class="data-card-icon">
+          <svg width="28" height="28" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#111110" stroke-width="1.8"/><path d="M7 10l2 2 4-4" stroke="#111110" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="data-card-title">AI 모델 사용</div>
+        <div class="data-card-desc">모델별 호출 횟수, 토큰 사용량, 비용 분석</div>
+        <button class="data-btn" onclick="openAiWritePopup()">Data 보기</button>
+      </div>
+      <div class="data-card">
+        <div class="data-card-icon">
+          <svg width="28" height="28" viewBox="0 0 20 20" fill="none"><path d="M3 10a7 7 0 1014 0A7 7 0 003 10z" stroke="#111110" stroke-width="1.8"/><path d="M10 6v4l3 2" stroke="#111110" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div class="data-card-title">성능 지표</div>
+        <div class="data-card-desc">응답시간, 업타임, 에러율 실시간 모니터링</div>
+        <button class="data-btn" onclick="showUnavailablePopup(event)">Data 보기</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg-lines"></div>
+  <h2 class="cta-title reveal">지금 바로 배포를 시작하세요</h2>
+  <p class="cta-desc reveal">신용카드 불필요. 5분 안에 첫 번째 앱을 배포하세요.</p>
+  <div class="cta-input-group reveal">
+    <input type="email" class="cta-input" placeholder="이메일을 입력하세요">
+    <button class="btn-primary-large" style="white-space:nowrap;border-radius:14px;" onclick="showUnavailablePopup(event)">
+      무료 시작
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  <p class="cta-note">이미 50,000+ 개발자가 Deployr를 사용하고 있습니다</p>
+</section>
+
+<!-- AI MODEL DATA WRITE POPUP -->
+<div class="popup-overlay" id="aiWritePopup" onclick="closeAiWritePopup(event)">
+  <div class="popup-box" style="max-width:460px;">
+    <button class="popup-close" onclick="document.getElementById('aiWritePopup').classList.remove('active')">✕</button>
+    <div style="margin-bottom:20px;">
+      <div class="popup-title" style="font-size:18px;margin-bottom:6px;">AI 모델 사용 데이터</div>
+      <div class="popup-author" style="font-size:13px;">내용과 작성자를 입력하세요</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:24px;">
+      <div>
+        <label style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.6px;display:block;margin-bottom:6px;">작성자</label>
+        <input id="aiWriteAuthor" type="text" placeholder="이름을 입력하세요"
+          style="width:100%;padding:12px 16px;border-radius:12px;border:1px solid var(--border-strong);background:var(--surface2);font-size:14px;font-family:inherit;color:var(--text-primary);outline:none;transition:border-color 0.2s;"
+          onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='rgba(0,0,0,0.14)'">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.6px;display:block;margin-bottom:6px;">내용</label>
+        <textarea id="aiWriteContent" placeholder="데이터 내용을 입력하세요" rows="5"
+          style="width:100%;padding:12px 16px;border-radius:12px;border:1px solid var(--border-strong);background:var(--surface2);font-size:14px;font-family:inherit;color:var(--text-primary);outline:none;resize:vertical;transition:border-color 0.2s;line-height:1.6;"
+          onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='rgba(0,0,0,0.14)'"></textarea>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div id="aiWriteStatus" style="font-size:13px;color:var(--text-muted);"></div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="document.getElementById('aiWritePopup').classList.remove('active')"
+          style="padding:10px 20px;border-radius:12px;border:1px solid var(--border-strong);background:transparent;font-size:14px;font-weight:600;cursor:pointer;color:var(--text-secondary);font-family:inherit;">취소</button>
+        <button onclick="submitAiWriteData()"
+          style="padding:10px 24px;border-radius:12px;background:var(--text-primary);color:white;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.2s;">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UNAVAILABLE POPUP -->
+<div class="popup-overlay" id="unavailablePopup" onclick="closeUnavailablePopup(event)">
+  <div class="popup-box" style="max-width:380px;text-align:center;">
+    <button class="popup-close" onclick="document.getElementById('unavailablePopup').classList.remove('active')">✕</button>
+    <div style="margin-bottom:16px;display:flex;justify-content:center;">
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="52" height="52" rx="16" fill="#f0efe9"/>
+        <rect x="16" y="24" width="20" height="16" rx="3" fill="#111110"/>
+        <path d="M20 24v-5a6 6 0 0112 0v5" stroke="#111110" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="26" cy="32" r="2" fill="white"/>
+      </svg>
+    </div>
+    <div class="popup-title" style="font-size:20px;margin-bottom:10px;">이용할 수 없습니다</div>
+    <p style="color:var(--text-secondary);font-size:14px;line-height:1.7;margin-bottom:24px;">해당 계정에서는 현재 이 서비스를 이용할 수 없습니다.<br>관리자에게 문의하거나 플랜을 업그레이드해주세요.</p>
+    <a href="pricing.html" class="btn-primary" style="display:inline-flex;padding:12px 28px;font-size:14px;border-radius:12px;">요금제 보기</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <rect width="24" height="24" rx="7" fill="#111110"/>
+      <path d="M7 12L10.5 16L17 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="19" cy="7" r="2.5" fill="#2563eb"/>
+    </svg>
+    Deployr
+  </div>
+  <div class="footer-links">
+    <a href="#">제품</a>
+    <a href="#">가격</a>
+    <a href="#">문서</a>
+    <a href="#">블로그</a>
+    <a href="#">회사소개</a>
+    <a href="#">채용</a>
+    <a href="#">개인정보처리방침</a>
+  </div>
+  <div class="footer-copy">© 2025 Deployr Inc.</div>
+</footer>
+
+<script>
+  // ─── AI MODEL DATA ───────────────────────────────────────────
+  const models = [
+    {
+      name: 'GPT-4o', maker: 'OpenAI',
+      badge: '최신 모델', badgeColor: 'rgba(16,185,129,0.15)', badgeText: '#10b981', badgeBorder: 'rgba(16,185,129,0.3)',
+      iconGradient: 'linear-gradient(135deg,#10b981,#059669)',
+      tabDot: '#10b981',
+      desc: 'OpenAI의 플래그십 멀티모달 모델. 텍스트, 이미지, 코드를 동시에 이해하며 복잡한 추론과 창의적 작업에서 탁월한 성능을 발휘합니다.',
+      context: '128K 토큰', speed: '빠름', specialty: '멀티모달',
+      aiAvatarBg: 'linear-gradient(135deg,#10b981,#059669)',
+      qaTitle: 'GPT-4o 예시 대화',
+      qas: [
+        { q: 'Python으로 배포 자동화 스크립트를 만들어줘', a: `import subprocess, json\n\ndef deploy(branch="main"):\n    # 빌드 → 테스트 → 배포\n    subprocess.run(["git","pull","origin",branch])\n    result = subprocess.run(["pytest","--tb=short"],\n                           capture_output=True)\n    if result.returncode == 0:\n        subprocess.run(["deployr","push",branch])\n        return {"status":"success","branch":branch}\n    return {"status":"failed","errors":result.stderr}` },
+        { q: '배포 실패 원인을 분석해줘', a: '로그를 분석한 결과 3가지 원인이 확인됩니다:\n① 메모리 한도 초과 (512MB → 768MB 권장)\n② 헬스체크 타임아웃 (30s → 60s 조정)\n③ DB 연결 풀 부족 (max_connections=10 → 25)' }
+      ]
+    },
+    {
+      name: 'Claude 3.5', maker: 'Anthropic',
+      badge: '추론 특화', badgeColor: 'rgba(245,158,11,0.15)', badgeText: '#f59e0b', badgeBorder: 'rgba(245,158,11,0.3)',
+      iconGradient: 'linear-gradient(135deg,#f59e0b,#d97706)',
+      tabDot: '#f59e0b',
+      desc: 'Anthropic의 최신 모델. 복잡한 코드 작성, 수학적 추론, 장문 분석에서 업계 최고 수준의 정확도를 보여줍니다. 한국어도 탁월합니다.',
+      context: '200K 토큰', speed: '매우 빠름', specialty: '코드/추론',
+      aiAvatarBg: 'linear-gradient(135deg,#f59e0b,#d97706)',
+      qaTitle: 'Claude 3.5 예시 대화',
+      qas: [
+        { q: 'Kubernetes 배포 YAML을 작성해줘', a: `apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: deployr-app\nspec:\n  replicas: 3\n  selector:\n    matchLabels: {app: deployr}\n  template:\n    spec:\n      containers:\n      - name: app\n        image: deployr/app:latest\n        resources:\n          limits: {cpu: "500m", memory: "512Mi"}` },
+        { q: '비용 최적화 방법을 추천해줘', a: '현재 인프라 분석 결과:\n• 미사용 인스턴스 3개 감지 → 월 ₩180,000 절약 가능\n• 스팟 인스턴스 전환 시 70% 추가 절약\n• 오토스케일링 임계값 60% → 80%로 조정 권장\n예상 절약액: 월 ₩520,000' }
+      ]
+    },
+    {
+      name: 'Gemini 1.5', maker: 'Google DeepMind',
+      badge: '초장문 처리', badgeColor: 'rgba(139,92,246,0.15)', badgeText: '#8b5cf6', badgeBorder: 'rgba(139,92,246,0.3)',
+      iconGradient: 'linear-gradient(135deg,#8b5cf6,#6d28d9)',
+      tabDot: '#8b5cf6',
+      desc: 'Google DeepMind의 최강 멀티모달 모델. 최대 1M 토큰의 초장문 컨텍스트를 지원하며 코드베이스 전체 분석이 가능합니다.',
+      context: '1M 토큰', speed: '보통', specialty: '초장문 분석',
+      aiAvatarBg: 'linear-gradient(135deg,#8b5cf6,#6d28d9)',
+      qaTitle: 'Gemini 1.5 예시 대화',
+      qas: [
+        { q: '전체 코드베이스에서 보안 취약점을 찾아줘', a: `보안 스캔 완료 (총 1,247개 파일 분석)\n\n[HIGH] SQL Injection 가능성\n  → src/api/users.js:142\n  → 파라미터 직접 삽입 감지\n\n[MEDIUM] JWT 만료시간 미설정\n  → src/auth/middleware.js:38\n\n[LOW] 환경변수 하드코딩 3건\n  → 수정 권장` },
+        { q: '아키텍처 개선점을 제안해줘', a: '현재: 모놀리식 Node.js 서버\n권장: 마이크로서비스 전환\n\n① Auth 서비스 분리\n② CDN 레이어 추가 (응답속도 40%↑)\n③ Redis 캐시 도입 (DB 부하 60%↓)\n④ Event-driven 아키텍처 적용' }
+      ]
+    },
+    {
+      name: 'Llama 3.1', maker: 'Meta AI',
+      badge: '오픈소스', badgeColor: 'rgba(239,68,68,0.15)', badgeText: '#ef4444', badgeBorder: 'rgba(239,68,68,0.3)',
+      iconGradient: 'linear-gradient(135deg,#ef4444,#dc2626)',
+      tabDot: '#ef4444',
+      desc: 'Meta의 오픈소스 대형 언어 모델. 완전한 데이터 주권과 프라이빗 배포가 가능하며 상업적 이용이 자유롭습니다.',
+      context: '128K 토큰', speed: '커스텀', specialty: '프라이빗 배포',
+      aiAvatarBg: 'linear-gradient(135deg,#ef4444,#dc2626)',
+      qaTitle: 'Llama 3.1 예시 대화',
+      qas: [
+        { q: '온프레미스 배포 방법을 알려줘', a: `# Docker로 Llama 3.1 로컬 배포\ndocker run -d \\\n  --gpus all \\\n  -p 8080:8080 \\\n  -v ./models:/models \\\n  -e MODEL_PATH=/models/llama-3.1-70b \\\n  deployr/llama-runner:latest\n\n# API 엔드포인트 테스트\ncurl localhost:8080/v1/chat \\n  -d '{"model":"llama-3.1","messages":[...]}'` },
+        { q: '파인튜닝 비용을 계산해줘', a: '70B 모델 파인튜닝 견적:\n• 데이터 준비: 1,000 샘플 기준\n• GPU 시간: A100 × 8 × 12h = 96 GPU-h\n• Deployr 비용: ₩480,000\n• 예상 학습 시간: 8-12시간\n\n✓ 커스텀 모델로 정확도 35% 향상 예상' }
+      ]
+    }
+  ];
+
+  let currentModel = 0;
+
+  function switchModel(idx) {
+    currentModel = idx;
+    const m = models[idx];
+
+    // Update tabs
+    document.querySelectorAll('.ai-tab').forEach((t, i) => {
+      t.classList.toggle('active', i === idx);
+    });
+
+    // Update model info
+    document.getElementById('modelIcon').style.background = '';
+    document.getElementById('modelName').textContent = m.name;
+    document.getElementById('modelMaker').textContent = m.maker;
+    document.getElementById('modelDesc').textContent = m.desc;
+    document.getElementById('specContext').textContent = m.context;
+    document.getElementById('specSpeed').textContent = m.speed;
+    document.getElementById('specSpecialty').textContent = m.specialty;
+
+    // Update QA panel
+    document.getElementById('qaTitle').textContent = m.name + ' 대화';
+    const body = document.getElementById('qaBody');
+    body.innerHTML = m.qas.map(qa => `
+      <div class="ai-qa-item">
+        <div class="ai-qa-q">
+          <div class="ai-qa-avatar-user">U</div>
+          <div class="ai-qa-bubble-user">${qa.q}</div>
+        </div>
+        <div class="ai-qa-a">
+          <div class="ai-qa-avatar-ai" style="background:${m.aiAvatarBg};">${m.name[0]}</div>
+          <div class="ai-qa-bubble-ai"><pre style="margin:0;white-space:pre-wrap;font-family:inherit;">${qa.a}</pre></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ─── DROPDOWN ────────────────────────────────────────────────
+  function toggleDropdown() {
+    document.getElementById('aiDropdown').classList.toggle('open');
+  }
+  function selectModel(e, idx) {
+    e.stopPropagation();
+    const labels = ['GPT-4o','Claude 3.5','Gemini 1.5','Llama 3.1'];
+    document.getElementById('dropdownLabel').textContent = labels[idx];
+    document.querySelectorAll('.ai-dropdown-item').forEach((el, i) => el.classList.toggle('active', i === idx));
+    document.getElementById('aiDropdown').classList.remove('open');
+    switchModel(idx);
+  }
+  // Close dropdown on outside click
+  document.addEventListener('click', (e) => {
+    const dd = document.getElementById('aiDropdown');
+    if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+  });
+
+  // Initialize
+  switchModel(0);
+
+  // ─── DATA POPUP ───────────────────────────────────────────────
+  // ─── AI MODEL DATA WRITE POPUP ───────────────────────────────
+  function openAiWritePopup() {
+    document.getElementById('aiWriteAuthor').value = '';
+    document.getElementById('aiWriteContent').value = '';
+    document.getElementById('aiWriteStatus').textContent = '';
+    document.getElementById('aiWritePopup').classList.add('active');
+  }
+  function closeAiWritePopup(e) {
+    if (e.target === document.getElementById('aiWritePopup')) {
+      document.getElementById('aiWritePopup').classList.remove('active');
+    }
+  }
+  async function submitAiWriteData() {
+    const author = document.getElementById('aiWriteAuthor').value.trim();
+    const content = document.getElementById('aiWriteContent').value.trim();
+    const statusEl = document.getElementById('aiWriteStatus');
+    if (!author || !content) {
+      statusEl.textContent = '작성자와 내용을 모두 입력해주세요.';
+      statusEl.style.color = '#ef4444';
+      return;
+    }
+    statusEl.textContent = '저장 중...';
+    statusEl.style.color = 'var(--text-muted)';
+
+    const SUPABASE_URL = 'https://yqfwandykhamxrikrxtl.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxZndhbmR5a2hhbXhyaWtyeHRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NzQxMTQsImV4cCI6MjA5NTI1MDExNH0.9YUceikHPUhUs5W2aRpHJTKSNiB1BAj5iNVE3L4HPiU';
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/ai_model_data`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ author, content, created_at: new Date().toISOString() })
+      });
+    } catch(e) { /* Supabase URL 미설정 시 무시 */ }
+
+    statusEl.textContent = '저장되었습니다.';
+    statusEl.style.color = '#16a34a';
+    setTimeout(() => {
+      document.getElementById('aiWritePopup').classList.remove('active');
+    }, 900);
+  }
+
+  // ─── UNAVAILABLE POPUP ────────────────────────────────────────
+  function showUnavailablePopup(e) {
+    e.preventDefault();
+    document.getElementById('unavailablePopup').classList.add('active');
+  }
+  function closeUnavailablePopup(e) {
+    if (e.target === document.getElementById('unavailablePopup')) {
+      document.getElementById('unavailablePopup').classList.remove('active');
+    }
+  }
+
+  // ─── HERO SCENE TILT ──────────────────────────────────────────
+  const scene = document.getElementById('heroScene');
+  const container = scene?.parentElement;
+  if (container && scene) {
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      scene.style.transform = `rotateX(${12 - y * 10}deg) rotateY(${-4 + x * 10}deg)`;
+    });
+    container.addEventListener('mouseleave', () => {
+      scene.style.transform = 'rotateX(12deg) rotateY(-4deg)';
+    });
+  }
+
+  // ─── UPTIME BLOCKS ────────────────────────────────────────────
+  const uptimeContainer = document.getElementById('uptimeBlocks');
+  if (uptimeContainer) {
+    for (let i = 0; i < 52; i++) {
+      const block = document.createElement('div');
+      block.className = 'uptime-block';
+      const r = Math.random();
+      if (r < 0.02) block.classList.add('down');
+      else if (r < 0.05) block.classList.add('warn');
+      uptimeContainer.appendChild(block);
+    }
+  }
+
+  // ─── SCROLL REVEAL ────────────────────────────────────────────
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // 500ms 후 viewport 안의 요소 강제 visible 처리 (iframe 환경 대비)
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+      el.classList.add('visible');
+    });
+  }, 600);
+
+  // 스크롤 시 보완
+  window.addEventListener('scroll', () => {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 100) el.classList.add('visible');
+    });
+  }, { passive: true });
+
+  // ─── TERMINAL TYPEWRITER ──────────────────────────────────────
+  const outputs = document.querySelectorAll('.term-output, .term-success');
+  outputs.forEach((line, i) => {
+    line.style.opacity = '0';
+    setTimeout(() => {
+      line.style.transition = 'opacity 0.3s';
+      line.style.opacity = '1';
+    }, 800 + i * 300);
+  });
+</script>
+</body>
+</html>
